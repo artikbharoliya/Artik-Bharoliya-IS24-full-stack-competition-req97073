@@ -55,13 +55,14 @@ BootstrapDialogTitle.propTypes = {
 
 const ProductModal = ({ open, setOpen, title, productId, buttonTitle, customAction }) => {
 
-  const [products] = useContext(ProductsContext);
+  const [products, setProducts] = useContext(ProductsContext);
   const [productName, setProductName] = useState("");
   const [scrumMaster, setScrumMaster] = useState("");
   const [productOwner, setProductOwner] = useState("");
   const [developers, setDevelopers] = useState("");
   const [startDate, setStartDate] = useState(moment());
   const [methodology, setMethodology] = useState("");
+  const [disabled, setDisabled] = useState(true);
 
   const setProductStates = (product) => {
     setProductName(product?.productName);
@@ -83,12 +84,34 @@ const ProductModal = ({ open, setOpen, title, productId, buttonTitle, customActi
     }
   }, [productId]);
 
+  useEffect(() => {
+    setDisabled(!(productName && scrumMaster && productOwner && developers.length > 0 && startDate && methodology));
+  }, [productName, scrumMaster, productOwner, developers, startDate, methodology]);
+
   const handleClose = () => {
     setOpen(false);
   };
 
-  const handleAddProduct = () => {
+  const handleAddProduct = async () => {
     console.log("Add product called");
+    const response = await fetch('/api/products', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        productName,
+        scrumMasterName: scrumMaster,
+        productOwnerName: productOwner,
+        developers,
+        startDate,
+        methodology
+      })
+    })
+    const product = await response.json();
+    setProducts([...products, product]);
+    setOpen(false);
+    console.log(response);
   }
 
   const handleBlur = () => {
@@ -101,6 +124,15 @@ const ProductModal = ({ open, setOpen, title, productId, buttonTitle, customActi
       startDate,
       methodology
     }))
+  }
+
+  const clearForm = () => {
+    setProductName('');
+    setScrumMaster('');
+    setProductOwner('');
+    setDevelopers([]);
+    setStartDate('');
+    setMethodology('');
   }
 
   return (
@@ -189,7 +221,16 @@ const ProductModal = ({ open, setOpen, title, productId, buttonTitle, customActi
       </DialogContent>
       <DialogActions>
         <Grid xs={12} item container justifyContent="center">
-          <Button type="submit" variant="contained" sx={{ my: 2 }} onClick={customAction ? customAction : handleAddProduct}>{buttonTitle}</Button>
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{ my: 2 }}
+            disabled={disabled}
+            onClick={customAction ? customAction : handleAddProduct}>{buttonTitle}</Button>
+          <Button
+            variant="contained"
+            sx={{ my: 2 }}
+            onClick={clearForm}>Clear Form</Button>
         </Grid>
       </DialogActions>
     </BootstrapDialog>

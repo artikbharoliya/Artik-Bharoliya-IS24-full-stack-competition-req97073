@@ -61,13 +61,13 @@ const ProductTable = () => {
             <TableHead>
               <TableRow>
                 <StyledTableCell>Product Name</StyledTableCell>
-                <StyledTableCell align="right">Scrum Master</StyledTableCell>
-                <StyledTableCell align="right">Product Owner</StyledTableCell>
-                <StyledTableCell align="right">Developers</StyledTableCell>
-                <StyledTableCell align="right">Start Date</StyledTableCell>
-                <StyledTableCell align="right">Methodology</StyledTableCell>
-                <StyledTableCell align="right"></StyledTableCell>
-                <StyledTableCell align="right"></StyledTableCell>
+                <StyledTableCell align="left">Scrum Master</StyledTableCell>
+                <StyledTableCell align="left">Product Owner</StyledTableCell>
+                <StyledTableCell align="left">Developers</StyledTableCell>
+                <StyledTableCell align="left">Start Date</StyledTableCell>
+                <StyledTableCell align="left">Methodology</StyledTableCell>
+                <StyledTableCell align="left"></StyledTableCell>
+                <StyledTableCell align="left"></StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -76,16 +76,16 @@ const ProductTable = () => {
                   <StyledTableCell component="th" scope="row">
                     {product?.productName}
                   </StyledTableCell>
-                  <StyledTableCell align="right">{product?.scrumMasterName}</StyledTableCell>
-                  <StyledTableCell align="right">{product?.productOwnerName}</StyledTableCell>
-                  <StyledTableCell align="right">{product?.developers}</StyledTableCell>
-                  <StyledTableCell align="right">{formatDate(product?.startDate)}</StyledTableCell>
-                  <StyledTableCell align="right">{product?.methodology}</StyledTableCell>
-                  <StyledTableCell align="right">
+                  <StyledTableCell align="left">{product?.scrumMasterName}</StyledTableCell>
+                  <StyledTableCell align="left">{product?.productOwnerName}</StyledTableCell>
+                  <StyledTableCell align="left">{product?.developers}</StyledTableCell>
+                  <StyledTableCell align="left">{formatDate(product?.startDate)}</StyledTableCell>
+                  <StyledTableCell align="left">{product?.methodology}</StyledTableCell>
+                  <StyledTableCell align="left">
                     <Button variant="outlined" onClick={() => setIsModalOpen(!isModalOpen)}>Edit</Button>
                     <ProductModal open={isModalOpen} setOpen={setIsModalOpen} title="Edit Product" buttonTitle="Edit Product" productId={product._id} customAction={() => { console.log("Custome action called") }} />
                   </StyledTableCell>
-                  <StyledTableCell align="right">Delete</StyledTableCell>
+                  <StyledTableCell align="left">Delete</StyledTableCell>
                 </StyledTableRow>
               ))}
             </TableBody>
