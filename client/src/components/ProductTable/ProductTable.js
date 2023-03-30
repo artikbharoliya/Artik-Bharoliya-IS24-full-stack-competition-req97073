@@ -6,8 +6,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import './productTable.css'
+import { ProductsContext } from '../../context/ProductsContext';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -28,83 +29,66 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
+const formatDate = (date) => {
+  let dateObj = new Date(date);
+  return dateObj.toLocaleDateString("en-US");
 }
 
-//Dummy data
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
 
 const ProductTable = () => {
 
-  const [products, setProducts] = useState();
+  const [products] = useContext(ProductsContext);
+  const [loading, setLoading] = useState(true);
+  console.log(products);
 
-  return (
-    <div className="product-table">
-      <TableContainer component={Paper}>
-        <Table aria-label="customized table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>Dessert (100g serving)</StyledTableCell>
-              <StyledTableCell align="right">Calories</StyledTableCell>
-              <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
-              <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
-              <StyledTableCell align="right">Protein&nbsp;(g)</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <StyledTableRow key={row.name}>
-                <StyledTableCell component="th" scope="row">
-                  {row.name}
-                </StyledTableCell>
-                <StyledTableCell align="right">{row.calories}</StyledTableCell>
-                <StyledTableCell align="right">{row.fat}</StyledTableCell>
-                <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-                <StyledTableCell align="right">{row.protein}</StyledTableCell>
-              </StyledTableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </div>
-  );
+  useEffect(() => {
+    console.log(products);
+    if (products.length > 0) setLoading(false);
+  }, [products]);
+
+  if (loading) {
+    return (
+      <div>Loading</div>
+    );
+  } else {
+    return (
+      <div className="product-table">
+        <TableContainer component={Paper}>
+          <Table aria-label="customized table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>Product Name</StyledTableCell>
+                <StyledTableCell align="right">Scrum Master</StyledTableCell>
+                <StyledTableCell align="right">Product Owner</StyledTableCell>
+                <StyledTableCell align="right">Developers</StyledTableCell>
+                <StyledTableCell align="right">Start Date</StyledTableCell>
+                <StyledTableCell align="right">Methodology</StyledTableCell>
+                <StyledTableCell align="right"></StyledTableCell>
+                <StyledTableCell align="right"></StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {products?.map((product) => (
+                <StyledTableRow key={product?.productName}>
+                  <StyledTableCell component="th" scope="row">
+                    {product?.productName}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">{product?.scrumMasterName}</StyledTableCell>
+                  <StyledTableCell align="right">{product?.productOwnerName}</StyledTableCell>
+                  <StyledTableCell align="right">{product?.developers}</StyledTableCell>
+                  <StyledTableCell align="right">{formatDate(product?.startDate)}</StyledTableCell>
+                  <StyledTableCell align="right">{product?.methodology}</StyledTableCell>
+                  <StyledTableCell align="right">Edit</StyledTableCell>
+                  <StyledTableCell align="right">Delete</StyledTableCell>
+                </StyledTableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
+    );
+
+  }
 }
 
 export default ProductTable;

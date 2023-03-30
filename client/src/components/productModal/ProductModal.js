@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
@@ -12,6 +12,7 @@ import { FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import moment from 'moment';
 import MultiInput from '../multiInput';
+import { ProductsContext } from '../../context/ProductsContext';
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -54,6 +55,7 @@ BootstrapDialogTitle.propTypes = {
 
 const ProductModal = ({ open, setOpen, title }) => {
 
+  const [products, setProducts] = useContext(ProductsContext);
   // const [loading, setLoading] = useState(true);
   const [productName, setProductName] = useState("");
   const [scrumMaster, setScrumMaster] = useState("");
