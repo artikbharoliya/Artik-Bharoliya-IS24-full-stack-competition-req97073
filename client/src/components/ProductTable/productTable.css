@@ -2,3 +2,7 @@
   overflow: scroll;
   height: 75vh;
 }
+
+.product-table ::-webkit-scrollbar {
+  display: none;
+}

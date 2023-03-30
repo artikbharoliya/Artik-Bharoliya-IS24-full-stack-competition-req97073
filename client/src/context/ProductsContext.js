@@ -9,12 +9,9 @@ const ProductsContextProvider = (props) => {
 
   // fetching the data to initialize the context.
   const fetchProducts = async () => {
-    fetch(api_url)
-      .then((response) => (response.json()))
-      .then((productsData) => {
-        setProducts(productsData);
-      })
-      .catch((error) => console.log(error));
+    const response = await fetch(api_url);
+    const products = await response.json();
+    setProducts(products);
   }
   useEffect(() => {
     fetchProducts();
