@@ -1,7 +1,10 @@
 import { Button, Grid } from "@mui/material";
+import { useState } from "react";
+import ProductModal from "../productModal";
 import SearchField from "../searchField";
 
 function FormContainer() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <>
       <Grid container mb={4}>
@@ -12,7 +15,8 @@ function FormContainer() {
           <SearchField />
         </Grid>
         <Grid item xs={2} container justifyContent="flex-end">
-          <Button variant="contained">Add Product +</Button>
+          <Button variant="contained" onClick={() => setIsModalOpen(!isModalOpen)}>Add Product +</Button>
+          <ProductModal open={isModalOpen} setOpen={setIsModalOpen} title="Add Data" />
         </Grid>
       </Grid>
 
