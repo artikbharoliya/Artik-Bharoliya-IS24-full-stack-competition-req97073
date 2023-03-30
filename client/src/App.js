@@ -1,17 +1,17 @@
+import { Container } from '@mui/material';
+
+import Products from './components/products/Products';
 import './App.css';
-import { useEffect } from 'react';
+import FormContainer from './components/formContainer';
 
 function App() {
 
-  useEffect(() => {
-    fetch('/api/products').then(data => console.log(data))
-
-  }, [])
 
   return (
-    <div className="App">
-      Hello World
-    </div>
+    <Container className="app-container">
+      <FormContainer />
+      <Products />
+    </Container >
   );
 }
 
