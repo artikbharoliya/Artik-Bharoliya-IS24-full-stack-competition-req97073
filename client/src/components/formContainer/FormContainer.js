@@ -16,7 +16,7 @@ function FormContainer() {
         </Grid>
         <Grid item xs={2} container justifyContent="flex-end">
           <Button variant="contained" onClick={() => setIsModalOpen(!isModalOpen)}>Add Product +</Button>
-          <ProductModal open={isModalOpen} setOpen={setIsModalOpen} title="Add Product" />
+          <ProductModal open={isModalOpen} setOpen={setIsModalOpen} title="Add Product" buttonTitle="Add Product" />
         </Grid>
       </Grid>
 

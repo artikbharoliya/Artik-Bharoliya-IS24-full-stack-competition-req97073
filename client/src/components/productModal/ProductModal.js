@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
@@ -53,10 +53,9 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-const ProductModal = ({ open, setOpen, title }) => {
+const ProductModal = ({ open, setOpen, title, productId, buttonTitle, customAction }) => {
 
-  const [products, setProducts] = useContext(ProductsContext);
-  // const [loading, setLoading] = useState(true);
+  const [products] = useContext(ProductsContext);
   const [productName, setProductName] = useState("");
   const [scrumMaster, setScrumMaster] = useState("");
   const [productOwner, setProductOwner] = useState("");
@@ -64,9 +63,45 @@ const ProductModal = ({ open, setOpen, title }) => {
   const [startDate, setStartDate] = useState(moment());
   const [methodology, setMethodology] = useState("");
 
+  const setProductStates = (product) => {
+    setProductName(product?.productName);
+    setScrumMaster(product?.scrumMasterName);
+    setProductOwner(product?.productOwnerName);
+    setDevelopers(product?.developers);
+    setStartDate(moment(product?.startDate));
+    setMethodology(product?.methodology);
+  }
+  useEffect(() => {
+    if (productId) {
+      const editingProduct = products.find(product => product._id === productId);
+      setProductStates(editingProduct);
+    } else {
+      const productFromLocalStorage = localStorage.getItem("product");
+      if (productFromLocalStorage) {
+        setProductStates(JSON.parse(productFromLocalStorage));
+      }
+    }
+  }, [productId]);
+
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleAddProduct = () => {
+    console.log("Add product called");
+  }
+
+  const handleBlur = () => {
+    console.log("Handle blur called");
+    localStorage.setItem("product", JSON.stringify({
+      productName,
+      scrumMasterName: scrumMaster,
+      productOwnerName: productOwner,
+      developers,
+      startDate,
+      methodology
+    }))
+  }
 
   return (
     <BootstrapDialog
@@ -88,6 +123,7 @@ const ProductModal = ({ open, setOpen, title }) => {
                 value={productName}
                 type="text"
                 onChange={(e) => { setProductName(e.target.value) }}
+                onBlur={handleBlur}
               />
             </FormControl>
           </Grid>
@@ -100,6 +136,7 @@ const ProductModal = ({ open, setOpen, title }) => {
                 type="text"
                 value={scrumMaster}
                 onChange={(e) => { setScrumMaster(e.target.value) }}
+                onBlur={handleBlur}
               />
             </FormControl>
           </Grid>
@@ -113,19 +150,20 @@ const ProductModal = ({ open, setOpen, title }) => {
                 value={productOwner}
                 type="email"
                 onChange={(e) => { setProductOwner(e.target.value) }}
+                onBlur={handleBlur}
               />
             </FormControl>
           </Grid>
 
           <Grid xs={12} item container justifyContent="center">
             <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
-              <MultiInput placeHolder="Developers" />
+              <MultiInput placeHolder="Developers" data={developers} setData={setDevelopers} onBlur={handleBlur} />
             </FormControl>
           </Grid>
 
           <Grid xs={6} item container justifyContent="center">
             <FormControl sx={{ m: 1, width: '35ch' }} variant="filled">
-              <DatePicker value={startDate} onChange={(newDate) => setStartDate(newDate)} />
+              <DatePicker value={startDate} onChange={(newDate) => setStartDate(newDate)} onBlur={handleBlur} />
             </FormControl>
           </Grid>
 
@@ -139,6 +177,7 @@ const ProductModal = ({ open, setOpen, title }) => {
                 value={methodology}
                 label="Methodology"
                 onChange={(e) => setMethodology(e.target.value)}
+                onBlur={handleBlur}
               >
                 <MenuItem value="Agile">Agile</MenuItem>
                 <MenuItem value="Waterfall">Waterfall</MenuItem>
@@ -150,7 +189,7 @@ const ProductModal = ({ open, setOpen, title }) => {
       </DialogContent>
       <DialogActions>
         <Grid xs={12} item container justifyContent="center">
-          <Button type="submit" variant="contained" sx={{ my: 2 }}>Save profile</Button>
+          <Button type="submit" variant="contained" sx={{ my: 2 }} onClick={customAction ? customAction : handleAddProduct}>{buttonTitle}</Button>
         </Grid>
       </DialogActions>
     </BootstrapDialog>

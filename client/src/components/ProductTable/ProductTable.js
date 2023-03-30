@@ -9,6 +9,8 @@ import Paper from '@mui/material/Paper';
 import { useContext, useEffect, useState } from 'react';
 import './productTable.css'
 import { ProductsContext } from '../../context/ProductsContext';
+import { Button } from '@mui/material';
+import ProductModal from '../productModal';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -39,6 +41,7 @@ const ProductTable = () => {
 
   const [products] = useContext(ProductsContext);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   console.log(products);
 
   useEffect(() => {
@@ -78,7 +81,10 @@ const ProductTable = () => {
                   <StyledTableCell align="right">{product?.developers}</StyledTableCell>
                   <StyledTableCell align="right">{formatDate(product?.startDate)}</StyledTableCell>
                   <StyledTableCell align="right">{product?.methodology}</StyledTableCell>
-                  <StyledTableCell align="right">Edit</StyledTableCell>
+                  <StyledTableCell align="right">
+                    <Button variant="outlined" onClick={() => setIsModalOpen(!isModalOpen)}>Edit</Button>
+                    <ProductModal open={isModalOpen} setOpen={setIsModalOpen} title="Edit Product" buttonTitle="Edit Product" productId={product._id} customAction={() => { console.log("Custome action called") }} />
+                  </StyledTableCell>
                   <StyledTableCell align="right">Delete</StyledTableCell>
                 </StyledTableRow>
               ))}
