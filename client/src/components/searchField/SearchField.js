@@ -1,7 +1,6 @@
 import React from 'react';
-import { IconButton, InputBase, Paper, TextField } from '@mui/material';
+import { IconButton, InputBase, Paper } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-
 
 export default function SearchField() {
 

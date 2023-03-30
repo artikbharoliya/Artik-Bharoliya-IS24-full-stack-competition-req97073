@@ -9,6 +9,10 @@ import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import moment from 'moment';
+import MultiInput from '../multiInput';
+
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -55,7 +59,7 @@ const ProductModal = ({ open, setOpen, title }) => {
   const [scrumMaster, setScrumMaster] = useState("");
   const [productOwner, setProductOwner] = useState("");
   const [developers, setDevelopers] = useState("");
-  const [startDate, setStartDate] = useState("");
+  const [startDate, setStartDate] = useState(moment());
   const [methodology, setMethodology] = useState("");
 
   const handleClose = () => {
@@ -72,8 +76,8 @@ const ProductModal = ({ open, setOpen, title }) => {
         {title}
       </BootstrapDialogTitle>
       <DialogContent dividers>
-        <Grid xs={12} container>
-          <Grid xs={12} container justifyContent="center">
+        <Grid xs={12} item container>
+          <Grid xs={12} item container justifyContent="center">
             <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
               <TextField
                 id="filled-basic"
@@ -85,7 +89,7 @@ const ProductModal = ({ open, setOpen, title }) => {
               />
             </FormControl>
           </Grid>
-          <Grid xs={12} container justifyContent="center">
+          <Grid xs={12} item container justifyContent="center">
             <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
               <TextField
                 id="filled-basic"
@@ -98,7 +102,7 @@ const ProductModal = ({ open, setOpen, title }) => {
             </FormControl>
           </Grid>
 
-          <Grid xs={12} container justifyContent="center">
+          <Grid xs={12} item container justifyContent="center">
             <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
               <TextField
                 id="filled-basic"
@@ -111,33 +115,20 @@ const ProductModal = ({ open, setOpen, title }) => {
             </FormControl>
           </Grid>
 
-          <Grid xs={12} container justifyContent="center">
+          <Grid xs={12} item container justifyContent="center">
             <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
-              <TextField
-                id="filled-basic"
-                label="Developers"
-                variant="filled"
-                type="text"
-                value={developers}
-                onChange={(e) => { setDevelopers(e.target.value) }}
-              />
+              <MultiInput placeHolder="Developers" />
             </FormControl>
           </Grid>
 
-          <Grid xs={6} container justifyContent="center">
-            <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
-              <TextField
-                id="filled-basic"
-                label="Date"
-                variant="filled"
-                type="tel"
-                value={startDate}
-                onChange={(e) => { setStartDate(e.target.value) }}
-              />
+          <Grid xs={6} item container justifyContent="center">
+            <FormControl sx={{ m: 1, width: '35ch' }} variant="filled">
+              <DatePicker value={startDate} onChange={(newDate) => setStartDate(newDate)} />
             </FormControl>
           </Grid>
 
-          <Grid xs={6} container justifyContent="center">
+
+          <Grid xs={6} item container justifyContent="center">
             <FormControl sx={{ m: 1, width: '35ch' }} variant="filled">
               <InputLabel id="pet-species">Methodology</InputLabel>
               <Select
@@ -156,8 +147,8 @@ const ProductModal = ({ open, setOpen, title }) => {
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Grid xs={12} container justifyContent="center">
-          <Button type="submit" variant="contained" sx={{ maxHeight: "48px", my: 2 }}>Save profile</Button>
+        <Grid xs={12} item container justifyContent="center">
+          <Button type="submit" variant="contained" sx={{ my: 2 }}>Save profile</Button>
         </Grid>
       </DialogActions>
     </BootstrapDialog>
