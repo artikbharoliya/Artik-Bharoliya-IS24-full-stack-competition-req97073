@@ -63,6 +63,7 @@ const ProductModal = ({ open, setOpen, title }) => {
   const [startDate, setStartDate] = useState(moment());
   const [methodology, setMethodology] = useState("");
   const [disabled, setDisabled] = useState(true);
+  const devLimit = 5;
 
   const setProductStates = (product) => {
     setProductName(product?.productName);
@@ -80,7 +81,12 @@ const ProductModal = ({ open, setOpen, title }) => {
   }, []);
 
   useEffect(() => {
-    setDisabled(!(productName && scrumMaster && productOwner && developers?.length > 0 && startDate && methodology));
+    setDisabled(!(productName
+      && scrumMaster
+      && productOwner
+      && (developers?.length > 0 && developers?.length <= devLimit)
+      && startDate
+      && methodology));
   }, [productName, scrumMaster, productOwner, developers, startDate, methodology]);
 
   const handleClose = () => {
@@ -184,7 +190,7 @@ const ProductModal = ({ open, setOpen, title }) => {
 
           <Grid xs={12} item container justifyContent="center">
             <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
-              <MultiInput placeHolder="Developers" data={developers} setData={setDevelopers} onBlur={handleBlur} />
+              <MultiInput placeHolder="Developers" data={developers} setData={setDevelopers} onBlur={handleBlur} limit={devLimit} />
             </FormControl>
           </Grid>
 
