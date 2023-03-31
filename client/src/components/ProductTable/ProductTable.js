@@ -43,9 +43,11 @@ const formatDate = (date) => {
 const ProductTable = () => {
 
   const [products, setProducts] = useContext(ProductsContext);
+
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [productId, setProductId] = useState(null);
+
 
   const handleDelete = async (id) => {
     if (window.confirm(`Are you sure you want to delete the product with id : ${id}`)) {
@@ -60,18 +62,19 @@ const ProductTable = () => {
       })
 
       const deletedProduct = await response.json();
-      const updatedProducts = products.filter(obj => obj._id != deletedProduct._id);
+      const updatedProducts = products.filter(obj => obj._id !== deletedProduct._id);
       setProducts(updatedProducts);
     }
   }
 
   const developerChips = (developers) => {
     return (
-      developers.map(developer => (
-        <Chip label={developer} variant="outlined" size='small' />
+      developers.map((developer, index) => (
+        <Chip label={developer} variant="outlined" size='small' key={index} />
       ))
     );
   }
+
   useEffect(() => {
     if (products.length > 0) setLoading(false);
   }, [products]);
