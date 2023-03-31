@@ -60,7 +60,7 @@ const ProductTable = () => {
       })
 
       const deletedProduct = await response.json();
-      const updatedProducts = products.filter(obj => obj._id != deletedProduct._id);
+      const updatedProducts = products.filter(obj => obj._id !== deletedProduct._id);
       setProducts(updatedProducts);
     }
   }
@@ -68,7 +68,7 @@ const ProductTable = () => {
   const developerChips = (developers) => {
     return (
       developers.map(developer => (
-        <Chip label={developer} variant="outlined" size='small' />
+        <Chip label={developer} variant="outlined" size='small' key={developer} />
       ))
     );
   }

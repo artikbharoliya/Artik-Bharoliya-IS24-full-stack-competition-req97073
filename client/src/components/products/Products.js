@@ -1,13 +1,16 @@
 
 import { Chip, Grid } from "@mui/material";
+import { useContext } from "react";
+import { ProductsContext } from "../../context/ProductsContext";
 import ProductTable from "../ProductTable";
 
 function Products() {
+  const [products] = useContext(ProductsContext);
 
   return (
     <>
       <Grid mb={3}>
-        <Chip label="Total Products: 256" variant="outlined" />
+        <Chip label={`Total Products: ${products.length}`} variant="outlined" />
       </Grid>
       <ProductTable />
     </>

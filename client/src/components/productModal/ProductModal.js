@@ -59,7 +59,7 @@ const ProductModal = ({ open, setOpen, title }) => {
   const [productName, setProductName] = useState("");
   const [scrumMaster, setScrumMaster] = useState("");
   const [productOwner, setProductOwner] = useState("");
-  const [developers, setDevelopers] = useState("");
+  const [developers, setDevelopers] = useState([]);
   const [startDate, setStartDate] = useState(moment());
   const [methodology, setMethodology] = useState("");
   const [disabled, setDisabled] = useState(true);
@@ -80,7 +80,7 @@ const ProductModal = ({ open, setOpen, title }) => {
   }, []);
 
   useEffect(() => {
-    setDisabled(!(productName && scrumMaster && productOwner && developers.length > 0 && startDate && methodology));
+    setDisabled(!(productName && scrumMaster && productOwner && developers?.length > 0 && startDate && methodology));
   }, [productName, scrumMaster, productOwner, developers, startDate, methodology]);
 
   const handleClose = () => {
@@ -105,9 +105,8 @@ const ProductModal = ({ open, setOpen, title }) => {
     })
     const product = await response.json();
     setProducts([...products, product]);
+    await clearForm();
     setOpen(false);
-    localStorage.setItem('products', JSON.stringify(null))
-    console.log(response);
   }
 
   const handleBlur = () => {
@@ -121,13 +120,14 @@ const ProductModal = ({ open, setOpen, title }) => {
     }))
   }
 
-  const clearForm = () => {
+  const clearForm = async () => {
     setProductName('');
     setScrumMaster('');
     setProductOwner('');
     setDevelopers([]);
     setStartDate('');
     setMethodology('');
+    localStorage.setItem('products', JSON.stringify(null));
   }
 
   return (
@@ -219,11 +219,11 @@ const ProductModal = ({ open, setOpen, title }) => {
           <Button
             type="submit"
             variant="contained"
-            sx={{ my: 2 }}
+            sx={{ my: 2, mr: 6 }}
             disabled={disabled}
             onClick={handleAddProduct}>Add Product</Button>
           <Button
-            variant="contained"
+            variant="outlined"
             sx={{ my: 2 }}
             onClick={clearForm}>Clear Form</Button>
         </Grid>

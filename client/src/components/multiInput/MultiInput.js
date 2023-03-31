@@ -7,7 +7,11 @@ const MultiInput = ({ placeHolder, data, setData, onBlur }) => {
     if (e.key !== 'Enter') return;
     const value = e.target.value;
     if (!value.trim()) return;
-    setData([...data, value]);
+    if (data) {
+      setData([...data, value]);
+    } else {
+      setData([value]);
+    }
     e.target.value = '';
   }
 

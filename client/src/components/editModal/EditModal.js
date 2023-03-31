@@ -59,7 +59,7 @@ const EditModal = ({ open, setOpen, title, productId }) => {
   const [productName, setProductName] = useState("");
   const [scrumMaster, setScrumMaster] = useState("");
   const [productOwner, setProductOwner] = useState("");
-  const [developers, setDevelopers] = useState("");
+  const [developers, setDevelopers] = useState([]);
   const [startDate, setStartDate] = useState(moment());
   const [methodology, setMethodology] = useState("");
   const [disabled, setDisabled] = useState(true);
@@ -136,6 +136,7 @@ const EditModal = ({ open, setOpen, title, productId }) => {
     setDevelopers([]);
     setStartDate('');
     setMethodology('');
+
   }
 
   if (loading) {
@@ -234,7 +235,7 @@ const EditModal = ({ open, setOpen, title, productId }) => {
               disabled={disabled}
               onClick={handleEditProduct}>Edit Product</Button>
             <Button
-              variant="contained"
+              variant="outlined"
               sx={{ my: 2 }}
               onClick={clearForm}>Clear Form</Button>
           </Grid>
