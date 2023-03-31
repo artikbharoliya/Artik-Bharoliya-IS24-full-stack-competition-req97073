@@ -22,7 +22,6 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 
 // API endpoint for checking the status of server
-
 app.get('/api/health', (req, res) => {
   res.status(200).json({
     status: 'Healthy',

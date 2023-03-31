@@ -6,9 +6,21 @@
     "version": "1.0.0"
   },
   "host": "localhost:3000",
-  "basePath": "/",
+  "basePath": "/api",
+  "tags": [
+    {
+      "name": "Products",
+      "description": "Endpoints"
+    }
+  ],
   "schemes": [
     "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
   ],
   "paths": {
     "/api/health": {
@@ -19,6 +31,143 @@
           "200": {
             "description": "OK"
           }
+        }
+      }
+    },
+    "/api/products/": {
+      "post": {
+        "tags": [
+          "Products"
+        ],
+        "description": "API endpoint to create a Product",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "productName": {
+                  "example": "any"
+                },
+                "productOwnerName": {
+                  "example": "any"
+                },
+                "developers": {
+                  "example": "any"
+                },
+                "scrumMasterName": {
+                  "example": "any"
+                },
+                "startDate": {
+                  "example": "any"
+                },
+                "methodology": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the created product"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "description": "API endpoint to get all the Products",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Returns all the products"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Products"
+        ],
+        "description": "API endpoint to update a particular product by product",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the deleted product"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Products"
+        ],
+        "description": "API endpoint to delete a particular product by product",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Returns the deleted product"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Products": {
+      "type": "object",
+      "properties": {
+        "productName": {
+          "type": "string",
+          "example": "ICBC"
+        },
+        "productOwnerName": {
+          "type": "string",
+          "example": "John Smith"
+        },
+        "developers": {
+          "type": "array",
+          "example": [
+            "David Johnson",
+            "Shane Watson"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "scrumMasterName": {
+          "type": "string",
+          "example": "Cameron White"
+        },
+        "startDate": {
+          "type": "string",
+          "example": "08/10/1998"
+        },
+        "methodology": {
+          "type": "string",
+          "example": "Agile"
         }
       }
     }
