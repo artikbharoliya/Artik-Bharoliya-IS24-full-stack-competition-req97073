@@ -53,6 +53,7 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
+//A modal to add the products data.
 const ProductModal = ({ open, setOpen, title }) => {
 
   const [products, setProducts] = useContext(ProductsContext);
@@ -73,6 +74,8 @@ const ProductModal = ({ open, setOpen, title }) => {
     setStartDate(moment(product?.startDate));
     setMethodology(product?.methodology);
   }
+
+  //Fetching the data from Local Storage if it has the products data to pre-populate the form.
   useEffect(() => {
     const productFromLocalStorage = localStorage.getItem("products");
     if (productFromLocalStorage) {
@@ -80,6 +83,7 @@ const ProductModal = ({ open, setOpen, title }) => {
     }
   }, []);
 
+  //Verifying the data.
   useEffect(() => {
     setDisabled(!(productName
       && scrumMaster
@@ -93,6 +97,7 @@ const ProductModal = ({ open, setOpen, title }) => {
     setOpen(false);
   };
 
+  // Adding the Product in the database by calling the API
   const handleAddProduct = async () => {
     console.log("Add product called");
     const response = await fetch('/api/products', {
@@ -115,6 +120,7 @@ const ProductModal = ({ open, setOpen, title }) => {
     setOpen(false);
   }
 
+  // When user goes away from the field, store the data in the local storage.
   const handleBlur = () => {
     localStorage.setItem("products", JSON.stringify({
       productName,
@@ -126,12 +132,13 @@ const ProductModal = ({ open, setOpen, title }) => {
     }))
   }
 
+  // Helper function to clear the form and clear the local storage.
   const clearForm = async () => {
     setProductName('');
     setScrumMaster('');
     setProductOwner('');
     setDevelopers([]);
-    setStartDate('');
+    setStartDate(moment());
     setMethodology('');
     localStorage.setItem('products', JSON.stringify(null));
   }

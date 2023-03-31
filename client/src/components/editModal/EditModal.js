@@ -53,6 +53,7 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
+// Modal to edit the product.
 const EditModal = ({ open, setOpen, title, productId }) => {
 
   const [products, setProducts] = useContext(ProductsContext);
@@ -77,7 +78,7 @@ const EditModal = ({ open, setOpen, title, productId }) => {
     const editingProduct = products.find(product => product._id === productId);
     setProductStates(editingProduct);
     setLoading(false);
-  }, [productId]);
+  }, [productId, products]);
 
   useEffect(() => {
     setDisabled(!(productName && scrumMaster && productOwner && developers.length > 0 && startDate && methodology));

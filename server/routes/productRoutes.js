@@ -1,4 +1,4 @@
-
+// Router to handle all the Products relate API endpoints. 
 const express = require("express");
 const routerProduct = express.Router();
 

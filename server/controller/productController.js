@@ -1,6 +1,10 @@
 const ServerError = require('../helpers/ServerError');
 const productModel = require('../model/productModel');
 
+/*
+ Controller for all the products related API endpoints.
+*/
+
 exports.createProduct = async (req, res) => {
   // #swagger.tags = ['Products']
   // #swagger.description = 'API endpoint to create a Product'
