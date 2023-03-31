@@ -10,7 +10,7 @@ exports.createProduct = async (req, res) => {
   const methodology = req.body.methodology;
 
 
-  if (!productName || !productOwnerName || !developers || !scrumMasterName || !startDate || !methodology) {
+  if (!productName || !productOwnerName || !developers || !scrumMasterName || !startDate || !methodology || developers?.length > 5) {
     res.status(500).json(new ServerError("Unable to create a product! Please provide all the data!", req.baseUrl));
   } else {
     const newProduct = new productModel({
