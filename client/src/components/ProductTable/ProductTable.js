@@ -37,9 +37,7 @@ const formatDate = (date) => {
   return dateObj.toLocaleDateString("en-US");
 }
 
-
-
-
+// Component to show the products data in the app.
 const ProductTable = () => {
 
   const [products, setProducts] = useContext(ProductsContext);

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// Model representing a Product.
 let productSchema = new mongoose.Schema({
   productName: {
     type: String,
@@ -9,6 +10,8 @@ let productSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+
+  // FUTURE: add limit to the developers.
   developers: {
     type: [String],
     required: true,

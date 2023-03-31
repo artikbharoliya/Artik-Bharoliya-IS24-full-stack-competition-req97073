@@ -12,12 +12,12 @@ const connectToDB = require('./database/dbConfig');
 connectToDB();
 
 app.use(cors());
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api/products', require('./routes/productRoutes'));
 
+// API endpoint for the SWAGGER documentation.
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 

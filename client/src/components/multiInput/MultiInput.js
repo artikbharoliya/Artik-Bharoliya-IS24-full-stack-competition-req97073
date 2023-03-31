@@ -1,7 +1,8 @@
-import { Alert, Chip, Collapse, Grid, IconButton, TextField } from "@mui/material";
+import { Alert, Chip, Grid, IconButton, TextField } from "@mui/material";
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { useEffect, useState } from "react";
 
+// Reusable multi input component. It allows users to enter multiple text entries.
 const MultiInput = ({ placeHolder, data, setData, onBlur, limit }) => {
 
   const handleKeyDown = (e) => {
@@ -24,7 +25,7 @@ const MultiInput = ({ placeHolder, data, setData, onBlur, limit }) => {
     } else {
       setShowError(false);
     }
-  }, [data]);
+  }, [data, limit]);
 
   const handleClear = () => {
     setData([]);
