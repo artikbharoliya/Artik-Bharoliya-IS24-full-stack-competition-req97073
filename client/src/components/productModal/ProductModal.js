@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
@@ -56,17 +56,79 @@ BootstrapDialogTitle.propTypes = {
 const ProductModal = ({ open, setOpen, title }) => {
 
   const [products, setProducts] = useContext(ProductsContext);
-  // const [loading, setLoading] = useState(true);
   const [productName, setProductName] = useState("");
   const [scrumMaster, setScrumMaster] = useState("");
   const [productOwner, setProductOwner] = useState("");
   const [developers, setDevelopers] = useState("");
   const [startDate, setStartDate] = useState(moment());
   const [methodology, setMethodology] = useState("");
+  const [disabled, setDisabled] = useState(true);
+
+  const setProductStates = (product) => {
+    setProductName(product?.productName);
+    setScrumMaster(product?.scrumMasterName);
+    setProductOwner(product?.productOwnerName);
+    setDevelopers(product?.developers);
+    setStartDate(moment(product?.startDate));
+    setMethodology(product?.methodology);
+  }
+  useEffect(() => {
+    const productFromLocalStorage = localStorage.getItem("products");
+    if (productFromLocalStorage) {
+      setProductStates(JSON.parse(productFromLocalStorage));
+    }
+  }, []);
+
+  useEffect(() => {
+    setDisabled(!(productName && scrumMaster && productOwner && developers.length > 0 && startDate && methodology));
+  }, [productName, scrumMaster, productOwner, developers, startDate, methodology]);
 
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleAddProduct = async () => {
+    console.log("Add product called");
+    const response = await fetch('/api/products', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        productName,
+        scrumMasterName: scrumMaster,
+        productOwnerName: productOwner,
+        developers,
+        startDate,
+        methodology
+      })
+    })
+    const product = await response.json();
+    setProducts([...products, product]);
+    setOpen(false);
+    localStorage.setItem('products', JSON.stringify(null))
+    console.log(response);
+  }
+
+  const handleBlur = () => {
+    localStorage.setItem("products", JSON.stringify({
+      productName,
+      scrumMasterName: scrumMaster,
+      productOwnerName: productOwner,
+      developers,
+      startDate,
+      methodology
+    }))
+  }
+
+  const clearForm = () => {
+    setProductName('');
+    setScrumMaster('');
+    setProductOwner('');
+    setDevelopers([]);
+    setStartDate('');
+    setMethodology('');
+  }
 
   return (
     <BootstrapDialog
@@ -88,6 +150,7 @@ const ProductModal = ({ open, setOpen, title }) => {
                 value={productName}
                 type="text"
                 onChange={(e) => { setProductName(e.target.value) }}
+                onBlur={handleBlur}
               />
             </FormControl>
           </Grid>
@@ -100,6 +163,7 @@ const ProductModal = ({ open, setOpen, title }) => {
                 type="text"
                 value={scrumMaster}
                 onChange={(e) => { setScrumMaster(e.target.value) }}
+                onBlur={handleBlur}
               />
             </FormControl>
           </Grid>
@@ -113,19 +177,20 @@ const ProductModal = ({ open, setOpen, title }) => {
                 value={productOwner}
                 type="email"
                 onChange={(e) => { setProductOwner(e.target.value) }}
+                onBlur={handleBlur}
               />
             </FormControl>
           </Grid>
 
           <Grid xs={12} item container justifyContent="center">
             <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
-              <MultiInput placeHolder="Developers" />
+              <MultiInput placeHolder="Developers" data={developers} setData={setDevelopers} onBlur={handleBlur} />
             </FormControl>
           </Grid>
 
           <Grid xs={6} item container justifyContent="center">
             <FormControl sx={{ m: 1, width: '35ch' }} variant="filled">
-              <DatePicker value={startDate} onChange={(newDate) => setStartDate(newDate)} />
+              <DatePicker value={startDate} onChange={(newDate) => setStartDate(newDate)} onBlur={handleBlur} />
             </FormControl>
           </Grid>
 
@@ -139,6 +204,7 @@ const ProductModal = ({ open, setOpen, title }) => {
                 value={methodology}
                 label="Methodology"
                 onChange={(e) => setMethodology(e.target.value)}
+                onBlur={handleBlur}
               >
                 <MenuItem value="Agile">Agile</MenuItem>
                 <MenuItem value="Waterfall">Waterfall</MenuItem>
@@ -150,7 +216,16 @@ const ProductModal = ({ open, setOpen, title }) => {
       </DialogContent>
       <DialogActions>
         <Grid xs={12} item container justifyContent="center">
-          <Button type="submit" variant="contained" sx={{ my: 2 }}>Save profile</Button>
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{ my: 2 }}
+            disabled={disabled}
+            onClick={handleAddProduct}>Add Product</Button>
+          <Button
+            variant="contained"
+            sx={{ my: 2 }}
+            onClick={clearForm}>Clear Form</Button>
         </Grid>
       </DialogActions>
     </BootstrapDialog>
