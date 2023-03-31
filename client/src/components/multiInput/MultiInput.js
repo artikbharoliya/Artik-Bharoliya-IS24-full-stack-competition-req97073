@@ -44,7 +44,7 @@ const MultiInput = ({ placeHolder, data, setData, onBlur, limit }) => {
           <Grid xs={12} item container justifyContent="space-between" sx={{ mt: "12px" }}>
             <div>
               {data.map((entry, index) => (
-                <Chip label={entry} variant="outlined" />
+                <Chip label={entry} variant="outlined" key={index} />
               ))}
             </div>
             <IconButton aria-label="delete" onClick={handleClear}>
