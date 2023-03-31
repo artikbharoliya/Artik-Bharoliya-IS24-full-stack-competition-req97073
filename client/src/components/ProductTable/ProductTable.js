@@ -9,8 +9,9 @@ import Paper from '@mui/material/Paper';
 import { useContext, useEffect, useState } from 'react';
 import './productTable.css'
 import { ProductsContext } from '../../context/ProductsContext';
-import { Button } from '@mui/material';
-import ProductModal from '../productModal';
+import { Button, Chip } from '@mui/material';
+import EditModal from '../editModal';
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -37,15 +38,41 @@ const formatDate = (date) => {
 }
 
 
+
+
 const ProductTable = () => {
 
-  const [products] = useContext(ProductsContext);
+  const [products, setProducts] = useContext(ProductsContext);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  console.log(products);
+  const [productId, setProductId] = useState(null);
 
+  const handleDelete = async (id) => {
+    if (window.confirm(`Are you sure you want to delete the product with id : ${id}`)) {
+      const response = await fetch('/api/products', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          _id: id,
+        })
+      })
+
+      const deletedProduct = await response.json();
+      const updatedProducts = products.filter(obj => obj._id != deletedProduct._id);
+      setProducts(updatedProducts);
+    }
+  }
+
+  const developerChips = (developers) => {
+    return (
+      developers.map(developer => (
+        <Chip label={developer} variant="outlined" size='small' />
+      ))
+    );
+  }
   useEffect(() => {
-    console.log(products);
     if (products.length > 0) setLoading(false);
   }, [products]);
 
@@ -72,25 +99,32 @@ const ProductTable = () => {
             </TableHead>
             <TableBody>
               {products?.map((product) => (
-                <StyledTableRow key={product?.productName}>
+                <StyledTableRow key={product?._id}>
                   <StyledTableCell component="th" scope="row">
                     {product?.productName}
                   </StyledTableCell>
                   <StyledTableCell align="left">{product?.scrumMasterName}</StyledTableCell>
                   <StyledTableCell align="left">{product?.productOwnerName}</StyledTableCell>
-                  <StyledTableCell align="left">{product?.developers}</StyledTableCell>
+                  <StyledTableCell align="left">{developerChips(product?.developers)}</StyledTableCell>
                   <StyledTableCell align="left">{formatDate(product?.startDate)}</StyledTableCell>
                   <StyledTableCell align="left">{product?.methodology}</StyledTableCell>
                   <StyledTableCell align="left">
-                    <Button variant="outlined" onClick={() => setIsModalOpen(!isModalOpen)}>Edit</Button>
-                    <ProductModal open={isModalOpen} setOpen={setIsModalOpen} title="Edit Product" buttonTitle="Edit Product" productId={product._id} customAction={() => { console.log("Custome action called") }} />
+                    <Button variant="outlined" onClick={() => {
+                      setProductId(product._id);
+                      setIsModalOpen(!isModalOpen);
+                    }}>Edit</Button>
                   </StyledTableCell>
-                  <StyledTableCell align="left">Delete</StyledTableCell>
+                  <StyledTableCell align="left">
+                    <Button variant="outlined" color='error' onClick={() => {
+                      handleDelete(product._id);
+                    }}>Delete</Button>
+                  </StyledTableCell>
                 </StyledTableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
+        <EditModal open={isModalOpen} setOpen={setIsModalOpen} title="Edit Product" buttonTitle="Edit Product" productId={productId} />
       </div>
     );
 

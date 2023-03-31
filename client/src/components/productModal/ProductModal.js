@@ -53,7 +53,7 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-const ProductModal = ({ open, setOpen, title, productId, buttonTitle, customAction }) => {
+const ProductModal = ({ open, setOpen, title }) => {
 
   const [products, setProducts] = useContext(ProductsContext);
   const [productName, setProductName] = useState("");
@@ -73,16 +73,11 @@ const ProductModal = ({ open, setOpen, title, productId, buttonTitle, customActi
     setMethodology(product?.methodology);
   }
   useEffect(() => {
-    if (productId) {
-      const editingProduct = products.find(product => product._id === productId);
-      setProductStates(editingProduct);
-    } else {
-      const productFromLocalStorage = localStorage.getItem("product");
-      if (productFromLocalStorage) {
-        setProductStates(JSON.parse(productFromLocalStorage));
-      }
+    const productFromLocalStorage = localStorage.getItem("products");
+    if (productFromLocalStorage) {
+      setProductStates(JSON.parse(productFromLocalStorage));
     }
-  }, [productId]);
+  }, []);
 
   useEffect(() => {
     setDisabled(!(productName && scrumMaster && productOwner && developers.length > 0 && startDate && methodology));
@@ -111,12 +106,12 @@ const ProductModal = ({ open, setOpen, title, productId, buttonTitle, customActi
     const product = await response.json();
     setProducts([...products, product]);
     setOpen(false);
+    localStorage.setItem('products', JSON.stringify(null))
     console.log(response);
   }
 
   const handleBlur = () => {
-    console.log("Handle blur called");
-    localStorage.setItem("product", JSON.stringify({
+    localStorage.setItem("products", JSON.stringify({
       productName,
       scrumMasterName: scrumMaster,
       productOwnerName: productOwner,
@@ -226,7 +221,7 @@ const ProductModal = ({ open, setOpen, title, productId, buttonTitle, customActi
             variant="contained"
             sx={{ my: 2 }}
             disabled={disabled}
-            onClick={customAction ? customAction : handleAddProduct}>{buttonTitle}</Button>
+            onClick={handleAddProduct}>Add Product</Button>
           <Button
             variant="contained"
             sx={{ my: 2 }}

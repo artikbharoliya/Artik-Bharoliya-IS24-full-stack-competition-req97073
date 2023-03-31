@@ -39,17 +39,20 @@ exports.getAllProducts = async (req, res) => {
 
 exports.updateProduct = async (req, res) => {
   const id = req.body._id;
-  productModel.findOneAndUpdate({ _id: id }, {
-    productName: req.body.productName,
-    productOwnerName: req.body.productOwnerName,
-    developers: req.body.developers,
-    scrumMasterName: req.body.scrumMasterName,
-    startDate: req.body.startDate,
-    methodology: req.body.methodology
-  }, { new: true }).then(data => res.json(data))
-    .catch(err => {
-      res.status(500).json(new ServerError("Can't update the product, please check all the data", req.baseUrl));
-    })
+  try {
+    const response = await productModel.findOneAndUpdate({ _id: id }, {
+      productName: req.body.productName,
+      productOwnerName: req.body.productOwnerName,
+      developers: req.body.developers,
+      scrumMasterName: req.body.scrumMasterName,
+      startDate: req.body.startDate,
+      methodology: req.body.methodology
+    }, { new: true });
+    res.json(response);
+  } catch {
+    res.status(500).json(new ServerError("Cannot find the given id in the database", req.baseUrl));
+  }
+
 }
 
 exports.deleteProduct = async (req, res) => {

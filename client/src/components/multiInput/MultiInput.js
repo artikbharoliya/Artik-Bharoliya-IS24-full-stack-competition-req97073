@@ -24,7 +24,7 @@ const MultiInput = ({ placeHolder, data, setData, onBlur }) => {
         onKeyDown={handleKeyDown}
         onBlur={onBlur}
       />
-      {data.length > 0 ?
+      {data?.length > 0 ?
         <Grid xs={12} item container justifyContent="space-between" sx={{ mt: "12px" }}>
           <div>
             {data.map((entry, index) => (
